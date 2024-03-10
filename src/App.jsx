@@ -7,12 +7,17 @@ import './App.css'
 
 function App() {
   const [displayedValue, setDisplayedValue] = useState('0')
-  const [result, setResult] = useState('0')
+  const [currentOperator, setCurrentOperator] = useState('');
 
   const handleClick = (value) => {
 
     if (value === '.' && displayedValue.includes('.')) return; // Prevent multiple decimal points
     if (value === '0' && displayedValue === '0') return; // Prevent numbers starting with multiple zeros
+    if (value === 'Reset') {
+      setDisplayedValue('0');
+      setCurrentOperator('');
+      return;
+    }
     setDisplayedValue(displayedValue + value);
   }
 
