@@ -16,7 +16,7 @@ const numbers = {
     decimal: '.',
     zero: '0',
     divide: '/',
-    multiply: 'x'
+    multiply: '*'
 }
 
 export default function Number({onButtonClick}) {
