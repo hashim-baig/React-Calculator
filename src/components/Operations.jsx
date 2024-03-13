@@ -7,7 +7,7 @@ const operations = {
 
 export default function Operations({onButtonClick}) {
 
-    const handleButtonClick = (value)=> {
+    const handleButtonClick = (value) => {
         onButtonClick(value);
     }
 
@@ -15,7 +15,7 @@ export default function Operations({onButtonClick}) {
         <div className="operations">
             {
                 Object.entries(operations).map(([key, value]) => {
-                    return <button key={key} id={key} onClick={()=> handleButtonClick(value)}>{value}</button>
+                    return <button className='keys-btn' key={key} id={key} onClick={()=> handleButtonClick(value)}>{value}</button>
                 })
             }
         </div>

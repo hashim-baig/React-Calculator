@@ -1,104 +1,101 @@
-import { useState } from 'react'
-
-import Number from './components/Number'
-import Operations from './components/Operations'
-
-import './App.css'
+import React, { useState } from 'react';
+import Number from './components/Number';
+import Operations from './components/Operations';
+import './App.css';
 
 function App() {
-  const [displayedValue, setDisplayedValue] = useState('0')
+  const [displayedValue, setDisplayedValue] = useState('0');
   const [currentOperator, setCurrentOperator] = useState('');
 
   const handleClick = (value) => {
+    switch (value) {
+      case '.':
+        if (displayedValue === '0') {
+          setDisplayedValue(displayedValue + value);
+          return;
+        };
+        if (displayedValue.includes('.')) return;
+        break;
+      case '0':
+        if (displayedValue === '0') return;
+        break;
+      case 'Reset':
+        setDisplayedValue('0');
+        setCurrentOperator('');
+        return;
+      case '=':
+        handleCalculate();
+        return;
+      case 'Del':
+        if (displayedValue === '0') return;
+        setDisplayedValue(prevValue => prevValue.slice(0, -1) || '0');
+        return;
+      default:
+        break;
+    }
 
-    if (value === '.' && displayedValue.includes('.')) return; // Prevent multiple decimal points
-    if (value === '0' && displayedValue === '0') return; // Prevent numbers starting with multiple zeros
-    if (displayedValue === '0') {
-      console.log('Setting single zero');
-      if (value === 'Del' || value === 'Reset' || value === '+' || value === "-" || value === "*" || value === "/") {
-        setDisplayedValue('0')
+    if (['+', '-', '*', '/'].includes(value)) {
+      if (displayedValue === '0') {
+        setDisplayedValue('0');
         return;
       }
-      setDisplayedValue(value)
-      return;
-    };
-    if (value === 'Reset') {
-      setDisplayedValue('0');
-      setCurrentOperator('');
-      return;
-    }
-    if (value === '+' || value === "-" || value === "*" || value === "/") {
-      if (['+', '-', '*', '/'].includes(displayedValue[displayedValue.length - 1])) {
-        let updatedValue = displayedValue.slice(0, -1) + value;
-        setDisplayedValue(updatedValue);
+      if (['+', '-', '*', '/'].includes(displayedValue.slice(-1))) {
+        setDisplayedValue(prevValue => prevValue.slice(0, -1) + value);
         setCurrentOperator(value);
-        console.log(currentOperator);
-        return
+        return;
       }
-      setDisplayedValue(displayedValue + value)
       setCurrentOperator(value);
-      console.log(currentOperator);
-      return;
-    }
-    if (value === "Del" && displayedValue !== '0') {
-      setDisplayedValue(displayedValue.slice(0, -1));
-      console.log(displayedValue.length)
-      if (displayedValue.length < 2) {
-        setDisplayedValue('0');
-      }
-      return;
     }
 
-    if (value === '=') {
-      handleCalculate()
-      return;
-    }
-    setDisplayedValue(displayedValue + value)
-  }
+    setDisplayedValue(prevValue => prevValue === '0' ? value : prevValue + value);
+  };
 
+  const handleCalculate = () => {
+    if (!currentOperator) return;
 
-  const handleCalculate = () =>  {
-    if (displayedValue === '') return;
-    const numbers = displayedValue.split(/[+\-*\/]/);
-    console.log(numbers);
-    const operand1 = parseFloat(numbers[0]);
-    const operand2 = parseFloat(numbers[1]);
-    let result;
-    switch (currentOperator) {
-      case '+':
-        result = operand1 + operand2;
-        break;
-      case '-':
-        result = operand1 - operand2;
-        break;
-      case '*':
-        result = operand1 * operand2;
-        break;
-      case '/':
-        if (operand2 === 0) {
-          setDisplayedValue('0');
-          setCurrentOperator('');;
-          document.getElementById('display').textContent = 'Error';
+    const expression = displayedValue.split(/([+\-*\/])/).filter(token => token.trim() !== '');
+    let result = parseFloat(expression[0]);
+
+    for (let i = 1; i < expression.length; i += 2) {
+      const operator = expression[i];
+      const operand = parseFloat(expression[i + 1]);
+
+      switch (operator) {
+        case '+':
+          result += operand;
+          break;
+        case '-':
+          result -= operand;
+          break;
+        case '*':
+          result *= operand;
+          break;
+        case '/':
+          if (operand === 0) {
+            setDisplayedValue('0');
+            setCurrentOperator('');
+            return;
+          }
+          result /= operand;
+          break;
+        default:
           return;
-        }
-        result = operand1 / operand2;
-        break;
+      }
     }
+
     setDisplayedValue(result.toString());
     setCurrentOperator('');
-    console.log(result)
-  }
-
+  };
 
   return (
     <main>
       <p id='display'>{displayedValue}</p>
-      <section>
+      <section className='input-section'>
         <Number onButtonClick={handleClick} />
         <Operations onButtonClick={handleClick} />
       </section>
     </main>
-  )
+  );
 }
 
-export default App
+export default App;

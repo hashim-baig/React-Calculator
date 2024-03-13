@@ -28,7 +28,7 @@ export default function Number({onButtonClick}) {
         <div className="numbers">
             {
                 Object.entries(numbers).map(([key, value]) => {
-                    return <button key={key} id={key} onClick={()=>handleButtonClick(value)}>{value}</button>
+                    return <button className='keys-btn' key={key} id={key} onClick={()=>handleButtonClick(value)}>{value}</button>
                 })
             }
         </div>

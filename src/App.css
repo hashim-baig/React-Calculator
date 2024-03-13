@@ -7,5 +7,39 @@ main {
     min-height: 100vh;
     display: grid;
     place-content: center;
+    gap: 1rem;
+    background-color: hsl(222, 26%, 31%);
+    font-family: League Spartan;
+}
+
+#display {
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    background-color: hsl(224, 36%, 15%);
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+    border-radius: 5px;
+}
+
+.keys-btn {
+    padding: .5rem .7rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: hsl(30, 25%, 89%);
+    font-weight: 700;
+    color: hsl(221, 14%, 31%);
+}
+
+.keys-btn:hover {
+    color: #fff;
+    background-color: hsl(224, 51%, 76%);
+}
+
+.input-section {
+    border-radius: 20px;
 }
 
